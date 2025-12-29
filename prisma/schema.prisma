@@ -1,0 +1,34 @@
+generator client {
+    provider = "prisma-client"
+    output   = "../prisma/generated/prisma"
+}
+
+datasource db {
+    provider = "postgresql"
+}
+
+model User {
+    id        Int      @id @default(autoincrement()) @map("id")
+    name      String   @map("nome")
+    email     String   @unique @map("email")
+    createdAt DateTime @default(now()) @map("criadoEm")
+    updatedAt DateTime @updatedAt @map("atualizadoEm")
+
+    campaigns Campaign[]
+
+    @@map("Usuario")
+}
+
+model Campaign {
+    id          Int      @id @default(autoincrement()) @map("id")
+    name        String   @map("nome")
+    description String?  @map("descricao")
+    isActive    Boolean  @default(true) @map("ativo")
+    createdAt   DateTime @default(now()) @map("criadoEm")
+    updatedAt   DateTime @updatedAt @map("atualizadoEm")
+
+    userId Int  @map("usuarioId")
+    user   User @relation(fields: [userId], references: [id])
+
+    @@map("Campanha")
+}

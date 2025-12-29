@@ -16,6 +16,8 @@ model User {
 
     campaigns Campaign[]
 
+    @@index([name(ops: raw("gin_trgm_ops"))], type: Gin, name: "usuario_nome_trgm_idx")
+    @@index([email(ops: raw("gin_trgm_ops"))], type: Gin, name: "usuario_email_trgm_idx")
     @@map("Usuario")
 }
 
@@ -30,5 +32,7 @@ model Campaign {
     userId Int  @map("usuarioId")
     user   User @relation(fields: [userId], references: [id])
 
+    @@index([name(ops: raw("gin_trgm_ops"))], type: Gin, name: "campanha_nome_trgm_idx")
+    @@index([description(ops: raw("gin_trgm_ops"))], type: Gin, name: "campanha_descricao_trgm_idx")
     @@map("Campanha")
 }

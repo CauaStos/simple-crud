@@ -1,0 +1,44 @@
+services:
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+            target: runner
+        ports:
+            - "3000:3000"
+        environment:
+            DATABASE_URL: postgresql://user:password@db:5432/simple-crud?schema=public
+        depends_on:
+            db-init:
+                condition: service_completed_successfully
+
+    db-init:
+        build:
+            context: .
+            dockerfile: Dockerfile
+            target: builder
+        environment:
+            DATABASE_URL: postgresql://user:password@db:5432/simple-crud?schema=public
+        command: sh -c "bunx prisma migrate deploy && bunx prisma db seed"
+        depends_on:
+            db:
+                condition: service_healthy
+
+    db:
+        image: postgres:15-alpine
+        container_name: nextjs-postgres
+        restart: always
+        environment:
+            POSTGRES_USER: user
+            POSTGRES_PASSWORD: password
+            POSTGRES_DB: simple-crud
+        volumes:
+            - db_data:/var/lib/postgresql/data
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -U user -d simple-crud"]
+            interval: 5s
+            timeout: 5s
+            retries: 5
+
+volumes:
+    db_data:

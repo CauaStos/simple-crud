@@ -1,0 +1,38 @@
+# Dependencies
+node_modules
+.pnp
+.pnp.js
+
+# Build output
+.next
+
+# Prisma generated client
+prisma/generated
+
+# VCS
+.git
+.gitignore
+
+# Env files
+.env
+.env*.local
+
+# Docker config
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Editor / OS junk
+.vscode
+.idea
+*.swp
+*.swo
+.DS_Store
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Docs
+README.md
